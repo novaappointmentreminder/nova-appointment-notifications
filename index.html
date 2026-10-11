@@ -14,6 +14,25 @@
       appId: "8baed0da-d07a-444d-8749-d74a8532b31b",
     });
   });
+
+    window.subscribeToNotifications = async function() {
+      const message = document.getElementById('subscriptionMessage');
+      const button = document.getElementById('subscribeButton');
+
+      try {
+        await OneSignal.Notifications.requestPermission();
+        await OneSignal.User.PushSubscription.optIn();
+
+       message.textContent = OneSignal.User.PushSubscription.optedIn
+  ? 'Notifications are enabled!'
+  : 'Please check your notification permission and try again.';
+        button.textContent = 'Subscription Requested';
+      } catch (error) {
+        message.textContent = 'Could not subscribe. Please refresh the page and try again.';
+        console.error(error);
+      }
+    };
+
 </script>
   <style>
     body {
@@ -39,6 +58,12 @@
     <h1>Nova Appointment Reminder</h1>
     <p>Your notification website is working.</p>
     <p>We're preparing your appointment alerts.</p>
+    
+<button id="subscribeButton" onclick="subscribeToNotifications()" style="background:#173b35;color:white;padding:14px 22px;border:0;border-radius:8px;font-size:16px;cursor:pointer;margin-top:16px;">
+  Subscribe to Notifications
+</button>
+<p id="subscriptionMessage">Enable notifications to receive appointment alerts.</p>
+
   </main>
 </body>
 </html>
